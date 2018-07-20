@@ -34,6 +34,7 @@
         "tabs",
         "*://*/*",
         "storage",
-        "unlimitedStorage"
+        "unlimitedStorage",
+        "downloads"
     ]
 }

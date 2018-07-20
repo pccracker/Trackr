@@ -10,9 +10,24 @@ $(function() {
         });
     };
 
+    var exportData = function() {
+        chrome.storage.local.get('trackr', function(data) {
+            if (! $.isEmptyObject(data)) {
+                
+                var result = JSON.stringify(data);
+                var url = 'data:application/json;base64,' + btoa(result);
+                chrome.downloads.download({
+                    url: url,
+                    filename: 'trackr_' + (new Date()).getTime() + '.json'
+                });
+            }
+        });
+    };
+
     getSettings();
 
     $('.controls #clear').on('click', function() {
+        exportData();
         chrome.storage.local.remove('trackr');
         location.reload();
     });
