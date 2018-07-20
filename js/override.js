@@ -24,19 +24,48 @@ $(function() {
         });
     };
 
+    var importData = function(res) {
+        try {
+            var data = JSON.parse(res);
+            chrome.storage.local.set(data);
+            location.reload();
+        } catch (ex) {
+            console.error(ex);
+        }
+    };
+
     getSettings();
 
-    $('.controls #clear').on('click', function() {
+    $('.container #clear').on('click', function() {
         exportData();
         chrome.storage.local.remove('trackr');
         location.reload();
+    });
+
+    $('.container').on('click', '#import', function() {
+        console.log('testtt');
+        $('.container #fileid').click();
+    });
+
+    $('.container').on('change', '#fileid', function() {
+        var file = $('.container #fileid')[0].files[0];
+        if (file) {
+            var reader = new FileReader();
+            reader.readAsText(file, "UTF-8");
+            reader.onload = function (evt) {
+                importData(evt.target.result);
+            };
+            reader.onerror = function (evt) {
+                console.log('error reading file');
+            };
+        }
     });
 
     chrome.storage.local.get('trackr', function(data) {
         if ($.isEmptyObject(data)) {
             var $container = $('.container');
             $container.empty();
-            $container.append('<div class="message"><h1>No URLs are tracked yet!</h1></div>');
+            $container.append('<div class="message"><h1>No URLs are tracked yet!</h1><input id="fileid" type="file" hidden/><button id="import">Import</button></div>');
             return;
         }
 
