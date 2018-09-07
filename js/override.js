@@ -43,7 +43,6 @@ $(function() {
     });
 
     $('.container').on('click', '#import', function() {
-        console.log('testtt');
         $('.container #fileid').click();
     });
 
